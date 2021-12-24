@@ -1,24 +1,66 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import CoinGecko from 'coingecko-api'
 
 function App() {
+  const [coins, setCoins] = useState(null)
+
+  useEffect( () =>{
+
+    const CoinGeckoClient = new CoinGecko();
+    async function pingAPI() {
+      // return await CoinGeckoClient.ping();
+
+      const response = await CoinGeckoClient.ping();
+      console.log(response.data);
+      return response
+
+      
+    }
+
+
+    async function fetchallCoin() {
+      // return await CoinGeckoClient.ping();
+
+      const response = await CoinGeckoClient.coins.all();
+      console.log(response.data);
+      setCoins(response.data)
+      return response
+
+      
+    }
+
+    pingAPI()
+    fetchallCoin()
+
+
+  }, [])
+
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div>samheart
+      {coins && (
+        <ul>
+
+          {coins.map(coin => {
+            return(
+              <li key={coin.id}> 
+                {coin.id}
+                {coin.name}
+                {/* <img src={coin.image} alt=""/> */}
+
+              </li>
+              
+            )
+          })}
+          
+          
+          
+           </ul>
+      )}
+    </div> 
+
   );
 }
 
